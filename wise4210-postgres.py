@@ -54,6 +54,7 @@ latest_io = {
 
 def on_message(client, userdata, msg):
     try:
+        print("📬 Received MQTT message on topic:", msg.topic)
         raw_data = json.loads(msg.payload.decode())
         print("✅ Received MQTT:", raw_data)
 
@@ -152,9 +153,13 @@ def on_message(client, userdata, msg):
 client = mqtt.Client(protocol=mqtt.MQTTv311)
 client.username_pw_set("root", "00000000")
 client.on_message = on_message
-client.connect("172.21.108.81", 1883, 60)  # replace with your broker IP
-client.subscribe("#")
+client.connect("172.21.108.81", 1883, 60)
+client.subscribe([ # replace with your MQTT topics as needed
+    ("Advantech/00D0C9FFF8E5/C9FFFFFFF08D/data", 0), 
+    ("Advantech/00D0C9FFF8E5/Device_Status", 0),
+])
 client.loop_start()
+
 
 # ---------------------------
 # Grafana Routes

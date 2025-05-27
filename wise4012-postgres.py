@@ -46,6 +46,7 @@ except Exception as e:
 # ---------------------------
 def on_message(client, userdata, msg):
     try:
+        print(f"📬 Received MQTT message on topic: {msg.topic}")
         raw_data = json.loads(msg.payload.decode())
         print(f"✅ Received MQTT from {msg.topic}: {raw_data}")
         data_storage.append(raw_data)
@@ -54,6 +55,34 @@ def on_message(client, userdata, msg):
         if conn is None:
             print("❌ PostgreSQL connection is missing.")
             return
+
+        # 🟡 Check if it's a connection log payload
+        if "status" in raw_data and "macid" in raw_data:
+            log_insert = {
+                "status": raw_data.get("status"),
+                "name": raw_data.get("name"),
+                "macid": raw_data.get("macid"),
+                "ipaddr": raw_data.get("ipaddr"),
+                "timestamp": datetime.utcnow()
+            }
+
+            with conn.cursor() as cursor:
+                try:
+                    cursor.execute(
+                        """
+                        INSERT INTO iotdata.wise4012_connection_log (status, name, macid, ipaddr, timestamp)
+                        VALUES (%(status)s, %(name)s, %(macid)s, %(ipaddr)s, %(timestamp)s)
+                        """,
+                        log_insert
+                    )
+                    conn.commit()
+                    print(f"📥 Inserted wise4012_connection_log: {log_insert}")
+                    socketio.emit("wise4012_connection_log", log_insert)
+                except Exception as log_err:
+                    print("❌ SQL Error (wise4012_connection_log):", log_err)
+                    conn.rollback()
+            return  # ✅ don’t proceed to insert sensor data
+        
 
         # Choose table based on topic
         if msg.topic == "wise4012_8C8046":
@@ -115,7 +144,12 @@ def on_message(client, userdata, msg):
 client = mqtt.Client(protocol=mqtt.MQTTv311)
 client.on_message = on_message
 client.connect("172.21.108.81", 1883, 60)  # replace with your broker IP
-client.subscribe("#")
+client.subscribe([ # replace with your MQTT topics as needed
+    ("wise4012_FEEAB5", 0),
+    ("wise4012_8C8046", 0),
+    ("Advantech/74FE488C8046/Device_Status", 0),
+    ("Advantech/00D0C9FEEAB5/Device_Status", 0),
+])
 client.loop_start()
 
 # ---------------------------
@@ -168,4 +202,4 @@ def handle_disconnect():
 # Main Entry Point
 # ---------------------------
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=4000)
+    socketio.run(app, host='0.0.0.0', port=4001)

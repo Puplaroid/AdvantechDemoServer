@@ -33,7 +33,12 @@ def on_message(client, userdata, msg):
 client = mqtt.Client(protocol=mqtt.MQTTv311)
 client.on_message = on_message
 client.connect("172.21.108.81", 1883, 60)  # replace with your broker IP
-client.subscribe("#")
+client.subscribe([ # replace with your MQTT topics as needed
+    ("wise4012_FEEAB5", 0),
+    ("wise4012_8C8046", 0),
+    ("Advantech/74FE488C8046/Device_Status", 0),
+    ("Advantech/00D0C9FEEAB5/Device_Status", 0),
+])
 client.loop_start()
 
 # ---------------------------
