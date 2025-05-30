@@ -203,3 +203,38 @@ def handle_disconnect():
 # ---------------------------
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=4001)
+
+
+# Note: Make sure to create the PostgreSQL "iotdata.wise4012_8C8046" and "iotdata.wise4012_FEEAB5" tables with appropriate columns:
+# CREATE TABLE iotdata.wise4012_8C8046 (
+#     time TIMESTAMP,
+#     s INTEGER,                    
+#     q INTEGER,
+#     c INTEGER,
+#     di1 BOOLEAN,
+#     di2 BOOLEAN,
+#     di3 BOOLEAN,
+#     di4 BOOLEAN,
+#     do1 BOOLEAN,
+#     do2 BOOLEAN
+# );
+# CREATE TABLE iotdata.wise4012_FEEAB5 (
+#     time TIMESTAMP,
+#     s INTEGER,
+#     q INTEGER,
+#     c INTEGER,
+#     di1 BOOLEAN,
+#     di2 BOOLEAN,
+#     di3 BOOLEAN,
+#     di4 BOOLEAN,
+#     do1 BOOLEAN,
+#     do2 BOOLEAN
+# );
+# Note: Make sure to create the PostgreSQL table `iotdata.wise4012_connection_log` with appropriate columns:
+# CREATE TABLE iotdata.wise4012_connection_log (
+#     status VARCHAR(50),
+#     name VARCHAR(100),
+#     macid VARCHAR(50),
+#     ipaddr VARCHAR(50),
+#     timestamp TIMESTAMP
+# );

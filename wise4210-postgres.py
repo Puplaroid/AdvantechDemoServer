@@ -153,7 +153,7 @@ def on_message(client, userdata, msg):
 client = mqtt.Client(protocol=mqtt.MQTTv311)
 client.username_pw_set("root", "00000000")
 client.on_message = on_message
-client.connect("172.21.108.81", 1883, 60)
+client.connect("172.21.108.132", 1883, 60)
 client.subscribe([ # replace with your MQTT topics as needed
     ("Advantech/00D0C9FFF8E5/C9FFFFFFF08D/data", 0), 
     ("Advantech/00D0C9FFF8E5/Device_Status", 0),
@@ -222,3 +222,21 @@ def handle_disconnect():
 # ---------------------------
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=4000)
+
+
+# Note: Make sure to adjust the MQTT topics and PostgreSQL table/column names as per your actual setup.
+# Also, ensure that the PostgreSQL database and tables are created with the appropriate schema before running this code.
+# Note: Make sure to create the PostgreSQL table `iotdata.wise4210_data` with appropriate columns:
+# CREATE TABLE iotdata.wise4210_data (
+#     s INTEGER, c INTEGER, q INTEGER, rssi INTEGER,
+#     di1 INTEGER, di2 INTEGER, di3 INTEGER, di4 INTEGER, di5 INTEGER, di6 INTEGER,
+#     do1 INTEGER, do2 INTEGER,
+#     timestamp TIMESTAMP, temp FLOAT, humidity FLOAT
+# );
+# CREATE TABLE iotdata.connection_log (
+#     status VARCHAR(50),
+#     name VARCHAR(100),
+#     macid VARCHAR(50),
+#     ipaddr VARCHAR(50),
+#     timestamp TIMESTAMP
+# );

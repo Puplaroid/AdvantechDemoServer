@@ -185,3 +185,14 @@ def handle_disconnect():
 # ---------------------------
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=4000)
+
+# Note: Make sure to create the PostgreSQL table `iotdata.wise2200_data` with the appropriate schema
+# CREATE TABLE iotdata.wise2200_data (
+#     temp FLOAT,
+#     temp_status INTEGER,
+#     humidity FLOAT,
+#     humidity_status INTEGER,
+#     rssi INTEGER,
+#     devaddr VARCHAR(50),
+#     timestamp TIMESTAMP
+# );
