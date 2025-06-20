@@ -1,2 +1,3 @@
-.env
 secret.json
+PG_Server.txt
+wise-paas_user.txt

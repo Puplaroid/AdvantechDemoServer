@@ -153,7 +153,7 @@ def on_message(client, userdata, msg):
 client = mqtt.Client(protocol=mqtt.MQTTv311)
 client.username_pw_set("root", "00000000")
 client.on_message = on_message
-client.connect("172.21.108.132", 1883, 60)
+client.connect("192.168.1.141", 1883, 60)
 client.subscribe([ # replace with your MQTT topics as needed
     ("Advantech/00D0C9FFF8E5/C9FFFFFFF08D/data", 0), 
     ("Advantech/00D0C9FFF8E5/Device_Status", 0),
